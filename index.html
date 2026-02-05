@@ -1,0 +1,176 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine for Sanjh</title><style>
+*{box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
+body{
+  margin:0;min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle at top,#ffb3c6,#ff4d6d);
+  overflow:hidden;
+}
+
+.page{display:none;width:100%;text-align:center}
+.page.active{display:block}
+
+.card{
+  background:#fff;padding:30px;border-radius:24px;
+  width:90%;max-width:420px;margin:auto;
+  box-shadow:0 20px 40px rgba(0,0,0,.25);
+  position:relative;overflow:hidden;
+}
+
+h1{color:#e11d48;position:relative;z-index:2}
+
+.glow{
+  color:#ff2d75;
+  text-shadow:0 0 8px #ff2d75,0 0 25px #ff8fc4;
+  animation:glow 2s infinite alternate
+}
+@keyframes glow{from{opacity:.7}to{opacity:1}}
+
+.buttons{display:flex;justify-content:center;gap:40px;margin-top:30px}
+
+.big-btn{
+  padding:18px 22px;
+  background:#22c55e;color:#fff;
+  border-radius:20px;
+  font-size:18px;font-weight:bold;
+  cursor:pointer;user-select:none
+}
+
+.no-btn{background:#ef4444;position:relative}
+
+.gifts{display:grid;grid-template-columns:1fr;gap:15px;margin-top:20px}
+.gift-box{
+  padding:20px;border-radius:18px;
+  background:#fde2e4;
+  font-size:20px;cursor:pointer
+}
+
+.next-btn{
+  margin-top:20px;padding:14px 20px;border-radius:16px;
+  background:#6366f1;color:#fff;font-size:16px;cursor:pointer
+}
+
+.back-btn{
+  padding:10px 16px;border-radius:14px;
+  background:#9ca3af;color:#fff;font-size:14px;cursor:pointer
+}
+
+.back-top{
+  position:absolute;top:14px;left:14px;z-index:3
+}
+
+.song-img{
+  width:100%;max-width:250px;border-radius:20px;margin:25px auto
+}
+
+.heart-bg{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:200px;opacity:0.25;animation:pulse 1.6s infinite;z-index:1
+}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.12)}100%{transform:scale(1)}}
+
+.final-text{position:relative;z-index:2}
+.message{font-size:20px;margin-top:15px;color:#e11d48;z-index:2;position:relative}
+</style></head>
+<body><audio id="bgMusic" loop>
+  <source src="dooron-dooron.mp3" type="audio/mpeg">
+</audio><!-- PAGE 1 --><div class="page active" id="p1">
+  <div class="card">
+    <h1>Hey <span class="glow">Sanjh</span> 💖</h1>
+    <p>Will you be my Valentine?</p>
+    <div class="buttons">
+      <div class="big-btn" onclick="yesClicked()">Yes, I will be your Valentine 💘</div>
+      <div class="big-btn no-btn" id="noBtn" onclick="moveNo()">No 🙈</div>
+    </div>
+    <p style="margin-top:15px">— Krish</p>
+  </div>
+</div><!-- PAGE 2 : GIFTS --><div class="page" id="p2">
+  <div class="card">
+    <h1>Choose a song 🎶</h1>
+    <div class="gifts">
+      <div class="gift-box" onclick="openSong('song1.mp3','O Meri Laila','song1.jpg',4)">🎁 Song 1</div>
+      <div class="gift-box" onclick="openSong('song2.mp3','Ranjhaya Ve','song2.jpg',5)">🎁 Song 2</div>
+      <div class="gift-box" onclick="openSong('song3.mp3','Bargad','song3.jpg',6)">🎁 Song 3</div>
+    </div>
+    <div class="next-btn" onclick="goToPage(3)">End ➜</div>
+    <div class="back-btn" onclick="goToPage(1)">⬅ Back</div>
+  </div>
+</div><!-- SONG PAGE 1 --><div class="page" id="p4">
+  <div class="card">
+    <div class="back-btn back-top" onclick="goToPage(2)">⬅ Back</div>
+    <h1>O Meri Laila 💕</h1>
+    <img src="song1.jpg" class="song-img">
+  </div>
+</div><!-- SONG PAGE 2 --><div class="page" id="p5">
+  <div class="card">
+    <div class="back-btn back-top" onclick="goToPage(2)">⬅ Back</div>
+    <h1>Ranjhaya Ve 💞</h1>
+    <img src="song2.jpg" class="song-img">
+  </div>
+</div><!-- SONG PAGE 3 --><div class="page" id="p6">
+  <div class="card">
+    <div class="back-btn back-top" onclick="goToPage(2)">⬅ Back</div>
+    <h1>Bargad 🌸</h1>
+    <img src="song3.jpg" class="song-img">
+  </div>
+</div><!-- FINAL PAGE --><div class="page" id="p3">
+  <div class="card">
+    <div class="heart-bg">❤️</div>
+    <div class="final-text">
+      <h1>I Love You <span class="glow">Sanjh</span></h1>
+      <div class="message">From <span class="glow">Krish</span> 💞</div>
+    </div>
+    </div>
+  </div><audio id="songPlayer"></audio>
+
+<script>
+let noCount=0;
+function moveNo(){
+  const b=document.getElementById('noBtn');
+  noCount++; if(noCount>=4) b.style.display='none';
+  b.style.transform=`translate(${Math.random()*200-100}px,${Math.random()*200-100}px)`;
+}
+
+function yesClicked(){
+  document.getElementById('bgMusic').play().catch(()=>{});
+  goToPage(2);
+}
+
+function openSong(file,title,img,page){
+  // stop background music
+  const bg = document.getElementById('bgMusic');
+  bg.pause(); bg.currentTime = 0;
+
+  // play selected gift song
+  const p = document.getElementById('songPlayer');
+  p.pause();
+  p.src = file;
+  p.currentTime = 0;
+  p.play().catch(()=>{});
+
+  // go to song page AFTER starting song
+  document.querySelectorAll('.page').forEach(pg=>pg.classList.remove('active'));
+  document.getElementById('p'+page).classList.add('active');
+}
+
+
+function goToPage(n){
+  const p = document.getElementById('songPlayer');
+  const bg = document.getElementById('bgMusic');
+
+  // if leaving song pages, stop gift song
+  if(n === 1 || n === 2 || n === 3){
+    p.pause();
+    p.currentTime = 0;
+  }
+
+  document.querySelectorAll('.page').forEach(pg=>pg.classList.remove('active'));
+  document.getElementById('p'+n).classList.add('active');
+}
+
+</script></body>
+</html>
